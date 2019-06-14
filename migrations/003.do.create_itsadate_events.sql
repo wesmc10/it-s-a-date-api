@@ -5,6 +5,6 @@ CREATE TABLE itsadate_events (
     event_time VARCHAR(5) NOT NULL,
     location VARCHAR NOT NULL,
     other VARCHAR,
-    day_id INTEGER NOT NULL,
+    day_id VARCHAR NOT NULL,
     calendar_id INTEGER REFERENCES itsadate_calendars(id) ON DELETE CASCADE NOT NULL
 );
