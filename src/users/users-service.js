@@ -15,10 +15,10 @@ const UsersService = {
             return 'Password must have at least one lowercase and uppercase letter, number, and special character';
         }
     },
-    UserNameAlreadyExists(db, userName) {
+    UserNameAlreadyExists(db, user_name) {
         return db
             .from('itsadate_users')
-            .where({ userName })
+            .where({ user_name })
             .first()
             .then(user => !!user);
     },
@@ -37,9 +37,14 @@ const UsersService = {
             id: user.id,
             first_name: xss(user.first_name),
             last_name: xss(user.last_name),
-            user_name: xss(user.user_name),
-            password: xss(user.password)
+            user_name: xss(user.user_name)
         };
+    },
+    deleteUser(db, id) {
+        return db
+            .from('itsadate_users')
+            .where({ id })
+            .delete()
     }
 };
 

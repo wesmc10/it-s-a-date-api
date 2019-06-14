@@ -48,13 +48,24 @@ usersRouter
                         };
 
                         return UsersService.insertNewUserIntoDatabase(req.app.get('db'), newUser)
-                            .then(insertedUser => {
+                            .then(user => {
                                 res
                                     .status(201)
                                     .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                                    .json(UsersService.sanitizeUser(insertedUser));
+                                    .json(UsersService.sanitizeUser(user));
                             })
                     })
+            })
+            .catch(next);
+    })
+    .delete(('/:id'), (req, res, next) => {
+        const { id } = req.params;
+
+        UsersService.deleteUser(req.app.get('db'), id)
+            .then(noContent => {
+                res
+                    .status(204)
+                    .end();
             })
             .catch(next);
     })
