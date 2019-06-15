@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const app = express();
 const usersRouter = require('./users/users-router');
+const calendarsRouter = require('./calendars/calendars-router');
+const jwtAuthRouter = require('./auth/jwt-auth-router');
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -15,6 +17,8 @@ app.use(cors());
 app.use(helmet());
 
 app.use('/api/users', usersRouter);
+app.use('/api/calendars', calendarsRouter);
+app.use('api/auth', jwtAuthRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');

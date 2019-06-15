@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const UsersService = require('./users-service');
+const { jwtAuthorization } = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -58,10 +59,14 @@ usersRouter
             })
             .catch(next);
     })
-    .delete(('/:id'), (req, res, next) => {
-        const { id } = req.params;
 
-        UsersService.deleteUser(req.app.get('db'), id)
+usersRouter
+    .route('/:user_id')
+    .all(jwtAuthorization)
+    .delete((req, res, next) => {
+        const { user_id } = req.params;
+
+        UsersService.deleteUser(req.app.get('db'), user_id)
             .then(noContent => {
                 res
                     .status(204)
