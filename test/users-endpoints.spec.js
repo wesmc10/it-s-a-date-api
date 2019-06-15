@@ -3,11 +3,10 @@ const knex = require('knex');
 const bcrypt = require('bcryptjs');
 const testHelpers = require('./test-helpers');
 
-describe.only('Users Endpoints', () => {
+describe('Users Endpoints', () => {
     let db;
 
     const testUsers = testHelpers.makeTestUsers();
-    const testUser = testUsers[0];
 
     before('make db instance', () => {
         db = knex({

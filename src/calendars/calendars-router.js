@@ -38,20 +38,42 @@ calendarsRouter
     .all(jwtAuthorization)
     .all(checkIfCalendarExists)
     .get((req, res) => {
-        const user_id = req.user.id;
-        const calendar_user_id = res.calendar.user_id;
-
-        if (user_id !== calendar_user_id) {
-            return res
-                .status(401)
-                .json({
-                    error: 'Unauthorized request'
-                });
-        }
-
         res
             .status(201)
             .json(CalendarsService.sanitizeCalendar(res.calendar));
+    })
+    .delete((req, res, next) => {
+        const { calendar_id } = req.params;
+
+        CalendarsService.deleteCalendarFromDatabase(req.app.get('db'), calendar_id)
+            .then(noContent => {
+                res
+                    .status(204)
+                    .end();
+            })
+            .catch(next);
+    })
+    .patch(jsonBodyParser, (req, res, next) => {
+        const { calendar_id } = req.params;
+        const { calendar_name } = req.body;
+        const calendarToUpdate = { calendar_name };
+
+        const numberOfValuesUpdated = Object.values(calendarToUpdate).filter(Boolean).length;
+        if (numberOfValuesUpdated === 0) {
+            return res
+                .status(400)
+                .json({
+                    error: 'Request body must contain a calendar name'
+                });
+        }
+
+        CalendarsService.updateCalendar(req.app.get('db'), calendar_id, calendarToUpdate)
+            .then(noContent => {
+                res
+                    .status(201)
+                    .end();
+            })
+            .catch(next);
     })
 
     async function checkIfCalendarExists(req, res, next) {

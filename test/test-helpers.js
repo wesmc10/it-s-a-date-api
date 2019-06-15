@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 function makeTestUsers() {
     return [
         {
@@ -31,6 +33,31 @@ function makeTestUsers() {
     ];
 }
 
+function makeTestCalendars() {
+    return [
+        {
+            id: 1,
+            calendar_name: 'test-calendar-1',
+            user_id: 4
+        },
+        {
+            id: 2,
+            calendar_name: 'test-calendar-2',
+            user_id: 3
+        },
+        {
+            id: 3,
+            calendar_name: 'test-calendar-3',
+            user_id: 2
+        },
+        {
+            id: 4,
+            calendar_name: 'test-calendar-4',
+            user_id: 1
+        }
+    ]
+}
+
 function cleanTables(db) {
     return db
         .transaction(trx =>
@@ -53,6 +80,7 @@ function makeAuthorizationHeader(user, secret = process.env.JWT_SECRET) {
 
 module.exports = {
     makeTestUsers,
+    makeTestCalendars,
     cleanTables,
     makeAuthorizationHeader
 };

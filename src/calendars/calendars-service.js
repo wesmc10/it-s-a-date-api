@@ -21,6 +21,18 @@ const CalendarsService = {
             calendar_name: xss(calendar.calendar_name),
             user_id: calendar.user_id
         };
+    },
+    deleteCalendarFromDatabase(db, id) {
+        return db
+            .from('itsadate_calendars')
+            .where({ id })
+            .delete();
+    },
+    updateCalendar(db, id, updatedCalendar) {
+        return db
+            .from('itsadate_calendars')
+            .where({ id })
+            .update(updatedCalendar);
     }
 }
 
