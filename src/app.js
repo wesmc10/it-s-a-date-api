@@ -18,7 +18,7 @@ app.use(helmet());
 
 app.use('/api/users', usersRouter);
 app.use('/api/calendars', calendarsRouter);
-app.use('api/auth', jwtAuthRouter);
+app.use('/api/auth', jwtAuthRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');

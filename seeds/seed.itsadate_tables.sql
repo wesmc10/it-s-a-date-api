@@ -8,7 +8,7 @@ TRUNCATE
 
 INSERT INTO itsadate_users (first_name, last_name, user_name, password)
 VALUES
-    ('Wes', 'McElroy', 'wesmcelroy2019', '$2a$12$vA.SKe65zk7OMEywO0bg7.oo/AvQmilrjfrlF./Pllv4h99lYfyh6'),
+    ('Wes', 'McElroy', 'wesmcelroy2019', '$2a$12$7Y2Als4/0yL2yYb2hyunvOYgoG02W9jMdQFP/tNNVIJMr0qF2gq8a'),
     ('Sarah', 'Darling', 'sarahd05', '$2a$12$hLTmG7CkPDlB6TM8Quu4gOHPoEFVOgyffE/dsAY.KcQP666fB/aU2'),
     ('Skooter', 'Pup', 'skoot&boot', '$2a$12$kH3rdYrwqNThfHUR2DBQ1ObZmQDi0COwUNL9VoswAWUQgj4O7LvD2'),
     ('Laura', 'Wilder', 'doggykittylover', '$2a$12$3wcdnlZWdol4lIhSgmN2rOltMytXZ5gDrdj7g59b5dGO00E8.uijO'),

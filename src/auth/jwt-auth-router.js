@@ -22,15 +22,35 @@ jwtAuthRouter
         }
 
         JwtAuthService.getUserWithUserName(req.app.get('db'), user_name)
-            .then(user => {
-                if (!user) {
+            .then(dbUser => {
+                if (!dbUser) {
                     return res
                         .status(400)
                         .json({
                             error: 'Incorrect username or password'
                         });
                 }
+
+                return JwtAuthService.comparePasswords(loginUser.password, dbUser.password)
+                    .then(passwordsMatch => {
+                        if (!passwordsMatch) {
+                            return res
+                                .status(400)
+                                .json({
+                                    error: 'Incorrect username or password'
+                                });
+                        }
+                        const sub = dbUser.user_name;
+                        const payload = { user_id: dbUser.id };
+                        res.send({
+                            authToken: JwtAuthService.createJwt(sub, payload)
+                        });
+                    })
             })
+            .catch(next)
     })
+
+jwtAuthRouter
+    .route('/signup')
 
 module.exports = jwtAuthRouter;

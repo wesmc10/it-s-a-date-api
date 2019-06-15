@@ -21,6 +21,8 @@ calendarsRouter
                 });
         }
 
+        newCalendar.user_id = req.user.id;
+
         CalendarsService.insertNewCalendarIntoDatabase(req.app.get('db'), newCalendar)
             .then(calendar => {
                 res
@@ -36,6 +38,17 @@ calendarsRouter
     .all(jwtAuthorization)
     .all(checkIfCalendarExists)
     .get((req, res) => {
+        const user_id = req.user.id;
+        const calendar_user_id = res.calendar.user_id;
+
+        if (user_id !== calendar_user_id) {
+            return res
+                .status(401)
+                .json({
+                    error: 'Unauthorized request'
+                });
+        }
+
         res
             .status(201)
             .json(CalendarsService.sanitizeCalendar(res.calendar));
