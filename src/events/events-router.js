@@ -10,16 +10,6 @@ eventsRouter
     .route('/')
     .all(jwtAuthorization)
     .post(jsonBodyParser, (req, res, next) => {
-        for (const field of ['event_name', 'description', 'event_time', 'location', 'day_id', 'calendar_id']) {
-            if (!req.body[field]) {
-                return res
-                    .status(400)
-                    .json({
-                        error: `The '${field}' field is required`
-                    });
-            }
-        }
-
         const { event_name, description, event_time, location, other, day_id, calendar_id } = req.body;
         const newEvent = {
             event_name,
@@ -30,6 +20,16 @@ eventsRouter
             day_id,
             calendar_id
         };
+        
+        for (const field of ['event_name', 'description', 'event_time', 'location', 'day_id', 'calendar_id']) {
+            if (!req.body[field]) {
+                return res
+                    .status(400)
+                    .json({
+                        error: `The '${field}' field is required`
+                    });
+            }
+        }
 
         EventsService.insertNewEventIntoDatabase(req.app.get('db'), newEvent)
             .then(event => {
@@ -38,6 +38,7 @@ eventsRouter
                     .location(path.posix.join(req.originalUrl, `/${event.id}`))
                     .json(EventsService.sanitizeEvent(event))
             })
+            .catch(next);
     })
 
 eventsRouter

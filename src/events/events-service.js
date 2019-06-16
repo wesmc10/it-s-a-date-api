@@ -10,11 +10,14 @@ const EventsService = {
     },
     sanitizeEvent(event) {
         return {
+            id: event.id,
             event_name: xss(event.event_name),
             description: xss(event.description),
             event_time: event.event_time,
             location: xss(event.location),
-            other: xss(event.other)
+            other: xss(event.other),
+            day_id: xss(event.day_id),
+            calendar_id: event.calendar_id
         };
     },
     insertNewEventIntoDatabase(db, newEvent) {
