@@ -65,7 +65,7 @@ describe('Users Endpoints', () => {
         });
     });
 
-    describe('DELETE /api/users', () => {
+    describe('DELETE /api/users/:user_id', () => {
         context('happy path', () => {
             beforeEach('insert users into db', () => {
                 return db

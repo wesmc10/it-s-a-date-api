@@ -10,18 +10,18 @@ calendarsRouter
     .route('/')
     .all(jwtAuthorization)
     .post(jsonBodyParser, (req, res, next) => {
-        const { calendar_name } = req.body;
-        const newCalendar = { calendar_name };
+        const { calendar_name, user_id } = req.body;
+        const newCalendar = { calendar_name, user_id };
 
-        if (!calendar_name) {
-            return res
-                .status(400)
-                .json({
-                    error: `The 'calendar_name' field is required`
-                });
+        for (const field of ['calendar_name', 'user_id']) {
+            if (!req.body[field]) {
+                return res
+                    .status(400)
+                    .json({
+                        error: `The '${field}' field is required`
+                    });
+            }
         }
-
-        newCalendar.user_id = req.user.id;
 
         CalendarsService.insertNewCalendarIntoDatabase(req.app.get('db'), newCalendar)
             .then(calendar => {
@@ -39,7 +39,7 @@ calendarsRouter
     .all(checkIfCalendarExists)
     .get((req, res) => {
         res
-            .status(201)
+            .status(200)
             .json(CalendarsService.sanitizeCalendar(res.calendar));
     })
     .delete((req, res, next) => {
@@ -70,7 +70,7 @@ calendarsRouter
         CalendarsService.updateCalendar(req.app.get('db'), calendar_id, calendarToUpdate)
             .then(noContent => {
                 res
-                    .status(201)
+                    .status(204)
                     .end();
             })
             .catch(next);

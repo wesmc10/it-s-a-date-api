@@ -2,7 +2,7 @@ const app = require('../src/app');
 const knex = require('knex');
 const testHelpers = require('./test-helpers');
 
-describe.only('Calendars Endpoints', () => {
+describe('Calendars Endpoints', () => {
     let db;
 
     const testCalendars = testHelpers.makeTestCalendars();
@@ -61,6 +61,102 @@ describe.only('Calendars Endpoints', () => {
                                 expect(calendar.user_id).to.eql(newCalendar.user_id);
                             })
                     )   
+            });
+        });
+    });
+
+    describe('GET /api/calendars/:calendar_id', () => {
+        context('happy path', () => {
+            beforeEach('insert users into db', () => {
+                return db
+                    .insert(testUsers)
+                    .into('itsadate_users');
+            });
+
+            beforeEach('insert calendars into db', () => {
+                return db
+                    .insert(testCalendars)
+                    .into('itsadate_calendars');
+            });
+
+            it('responds with 200 and the specified calendar', () => {
+                const calendarId = 1;
+                const selectedCalendar = testCalendar;
+
+                return supertest(app)
+                    .get(`/api/calendars/${calendarId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .expect(200, selectedCalendar);
+            });
+        });
+    });
+
+    describe('DELETE /api/calendars/:calendar_id', () => {
+        context('happy path', () => {
+            beforeEach('insert users into db', () => {
+                return db
+                    .insert(testUsers)
+                    .into('itsadate_users');
+            });
+
+            beforeEach('insert calendars into db', () => {
+                return db
+                    .insert(testCalendars)
+                    .into('itsadate_calendars');
+            });
+
+            it('responds with 204 and deletes the specified calendar', () => {
+                const calendarId = 1;
+
+                return supertest(app)
+                    .delete(`/api/calendars/${calendarId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/calendars/${calendarId}`)
+                            .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                            .expect(404)
+                    )
+            });
+        });
+    });
+
+    describe('PATCH /api/calendars/:calendar_id', () => {
+        context('happy path', () => {
+            beforeEach('insert users into db', () => {
+                return db
+                    .insert(testUsers)
+                    .into('itsadate_users');
+            });
+
+            beforeEach('insert calendars into db', () => {
+                return db
+                    .insert(testCalendars)
+                    .into('itsadate_calendars');
+            });
+
+            it('responds with 204 and updates the specified calendar', () => {
+                const calendarId = 1;
+                const updateCalendar = {
+                    calendar_name: 'updated-calendar-name'
+                };
+                const expectedCalendar = {
+                    ...testCalendars[calendarId - 1],
+                    ...updateCalendar
+                };
+
+                return supertest(app)
+                    .patch(`/api/calendars/${calendarId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .send(updateCalendar)
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/calendars/${calendarId}`)
+                            .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                            .expect(200, expectedCalendar)    
+                    )
             });
         });
     });

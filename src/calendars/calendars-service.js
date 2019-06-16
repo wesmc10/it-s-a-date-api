@@ -34,6 +34,6 @@ const CalendarsService = {
             .where({ id })
             .update(updatedCalendar);
     }
-}
+};
 
 module.exports = CalendarsService;
