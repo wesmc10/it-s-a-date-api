@@ -35,7 +35,7 @@ const EventsService = {
     },
     updateEvent(db, id, updatedEvent) {
         return db
-            .from('itadate_events')
+            .from('itsadate_events')
             .where('id', id)
             .update(updatedEvent);
     }

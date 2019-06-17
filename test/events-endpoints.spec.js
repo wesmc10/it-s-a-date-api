@@ -26,7 +26,7 @@ describe('Events Endpoints', () => {
 
     afterEach('clean table', () => testHelpers.cleanTables(db));
 
-    describe.only('POST /api/events', () => {
+    describe('POST /api/events', () => {
         context('happy path', () => {
             beforeEach('insert users into db', () => {
                 return db
@@ -110,7 +110,97 @@ describe('Events Endpoints', () => {
             });
 
             it('responds with 200 and the specified event', () => {
-                
+                eventId = 1;
+                expectedEvent = testEvent;
+
+                return supertest(app)
+                    .get(`/api/events/${eventId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .expect(200, expectedEvent);
+            });
+        });
+    });
+
+    describe('DELETE /api/events/:event_id', () => {
+        context('happy path', () => {
+            beforeEach('insert users into db', () => {
+                return db
+                    .insert(testUsers)
+                    .into('itsadate_users');
+            });
+
+            beforeEach('insert calendars into db', () => {
+                return db
+                    .insert(testCalendars)
+                    .into('itsadate_calendars');
+            });
+
+            beforeEach('insert events into db', () => {
+                return db
+                    .insert(testEvents)
+                    .into('itsadate_events');
+            });
+
+            it('responds with a 204 and deletes the specified event', () => {
+                const eventId = 1;
+
+                return supertest(app)
+                    .delete(`/api/events/${eventId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/events/${eventId}`)
+                            .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                            .expect(404)    
+                    )
+            });
+        });
+    });
+
+    describe('PATCH /api/events/:event_id', () => {
+        context('happy path', () => {
+            beforeEach('insert users into db', () => {
+                return db
+                    .insert(testUsers)
+                    .into('itsadate_users');
+            });
+
+            beforeEach('insert calendars into db', () => {
+                return db
+                    .insert(testCalendars)
+                    .into('itsadate_calendars');
+            });
+
+            beforeEach('insert events into db', () => {
+                return db
+                    .insert(testEvents)
+                    .into('itsadate_events');
+            });
+
+            it('responds with 204 and updates the specified event', () => {
+                const eventId = 1;
+                const eventToUpdate = {
+                    event_name: 'new-test-event-1',
+                    description: 'new-test-event-1-description',
+                    other: 'new-test-event-1-other'
+                };
+                const expectedEvent = {
+                    ...testEvents[eventId - 1],
+                    ...eventToUpdate
+                };
+
+                return supertest(app)
+                    .patch(`/api/events/${eventId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                    .send(eventToUpdate)
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/events/${eventId}`)   
+                            .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
+                            .expect(200, expectedEvent) 
+                    )
             });
         });
     });

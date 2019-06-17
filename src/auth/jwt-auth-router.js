@@ -41,15 +41,14 @@ jwtAuthRouter
                         }
                         const sub = dbUser.user_name;
                         const payload = { user_id: dbUser.id };
-                        res.send({
-                            authToken: JwtAuthService.createJwt(sub, payload)
-                        });
+                        res
+                            .status(200)
+                            .send({
+                                authToken: JwtAuthService.createJwt(sub, payload)
+                            });
                     })
             })
             .catch(next)
     })
-
-jwtAuthRouter
-    .route('/signup')
 
 module.exports = jwtAuthRouter;

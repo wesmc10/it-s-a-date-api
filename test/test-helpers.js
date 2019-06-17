@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 function makeTestUsers() {
     return [
@@ -7,28 +8,28 @@ function makeTestUsers() {
             first_name: 'User-1-first-name',
             last_name: 'User-1-last-name',
             user_name: 'User-1-user-name',
-            password: 'User-1-password'
+            password: '!2#4AsDf'
         },
         {
             id: 2,
             first_name: 'User-2-first-name',
             last_name: 'User-2-last-name',
             user_name: 'User-2-user-name',
-            password: 'User-2-password'
+            password: ')9*7PoIu'
         },
         {
             id: 3,
             first_name: 'User-3-first-name',
             last_name: 'User-3-last-name',
             user_name: 'User-3-user-name',
-            password: 'User-3-password'
+            password: '%6&8JhGf'
         },
         {
             id: 4,
             first_name: 'User-4-first-name',
             last_name: 'User-4-last-name',
             user_name: 'User-4-user-name',
-            password: 'User-4-password'
+            password: '#7%8BgMj'
         }
     ];
 }
@@ -126,6 +127,22 @@ function cleanTables(db) {
         )
 }
 
+function seedUsers(db, users) {
+    const hashedUsers = users.map(user => ({
+        ...user,
+        password: bcrypt.hashSync(user.password, 1)
+    }));
+    return db
+        .insert(hashedUsers)
+        .into('itsadate_users')
+        .then(() =>
+            db.raw(
+                `SELECT setval('itsadate_users_id_seq', ?)`,
+                [users[users.length - 1].id],
+            )
+        )
+  }
+
 function makeAuthorizationHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
         subject: user.user_name,
@@ -139,5 +156,6 @@ module.exports = {
     makeTestCalendars,
     makeTestEvents,
     cleanTables,
+    seedUsers,
     makeAuthorizationHeader
 };
