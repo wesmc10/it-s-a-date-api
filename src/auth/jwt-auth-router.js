@@ -39,13 +39,24 @@ jwtAuthRouter
                                     error: 'Incorrect username or password'
                                 });
                         }
-                        const sub = dbUser.user_name;
-                        const payload = { user_id: dbUser.id };
-                        res
-                            .status(200)
-                            .send({
-                                authToken: JwtAuthService.createJwt(sub, payload)
-                            });
+
+                        return JwtAuthService.getUserCalendar(req.app.get('db'), dbUser.id)
+                            .then(dbCalendar => {
+
+                                return JwtAuthService.getUserEvents(req.app.get('db'), dbCalendar.id)
+                                    .then(dbEvents => {
+                                        const sub = dbUser.user_name;
+                                        const payload = { user_id: dbUser.id };
+                                        res
+                                            .status(200)
+                                            .send({
+                                                authToken: JwtAuthService.createJwt(sub, payload),
+                                                dbUser,
+                                                dbCalendar,
+                                                dbEvents
+                                            });
+                                    })
+                            })
                     })
             })
             .catch(next)

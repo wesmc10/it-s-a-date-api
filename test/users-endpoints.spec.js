@@ -7,6 +7,7 @@ describe('Users Endpoints', () => {
     let db;
 
     const testUsers = testHelpers.makeTestUsers();
+    const testUser = testUsers[1];
 
     before('make db instance', () => {
         db = knex({
@@ -78,6 +79,7 @@ describe('Users Endpoints', () => {
 
                 return supertest(app)
                     .delete(`/api/users/${userId}`)
+                    .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
                     .expect(204);
             });
         });

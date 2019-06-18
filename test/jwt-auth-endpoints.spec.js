@@ -3,7 +3,7 @@ const knex = require('knex');
 const testHelpers = require('./test-helpers');
 const jwt = require('jsonwebtoken');
 
-describe.only('Authorization Endpoint', () => {
+describe('Authorization Endpoint', () => {
     let db;
 
     const testUsers = testHelpers.makeTestUsers();

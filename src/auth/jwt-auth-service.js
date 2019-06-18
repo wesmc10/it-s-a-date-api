@@ -22,6 +22,17 @@ const JwtAuthService = {
             subject,
             algorithm: 'HS256'
         });
+    },
+    getUserCalendar(db, user_id) {
+        return db
+            .from('itsadate_calendars')
+            .where('user_id', user_id)
+            .first();
+    },
+    getUserEvents(db, calendar_id) {
+        return db
+            .from('itsadate_events')
+            .where('calendar_id', calendar_id);
     }
 };
 
