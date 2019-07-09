@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const UsersService = require('./users-service');
+const JwtAuthService = require('../auth/jwt-auth-service');
 const { jwtAuthorization } = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
@@ -50,10 +51,15 @@ usersRouter
 
                         return UsersService.insertNewUserIntoDatabase(req.app.get('db'), newUser)
                             .then(user => {
+                                const sub = user.user_name;
+                                const payload = { user_id: user.id };
                                 res
                                     .status(201)
                                     .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                                    .json(UsersService.sanitizeUser(user));
+                                    .send({
+                                        authToken: JwtAuthService.createJwt(sub, payload),
+                                        user: UsersService.sanitizeUser(user)
+                                    });
                             })
                     })
             })
