@@ -71,9 +71,15 @@ calendarsRouter
 
         CalendarsService.updateCalendar(req.app.get('db'), calendar_id, calendarToUpdate)
             .then(noContent => {
-                res
-                    .status(204)
-                    .end();
+
+                return CalendarsService.getCalendarById(req.app.get('db'), calendar_id)
+                    .then(calendar => {
+                        res
+                            .status(200)
+                            .send({
+                                calendar: CalendarsService.sanitizeCalendar(calendar)
+                            });
+                    })
             })
             .catch(next);
     })

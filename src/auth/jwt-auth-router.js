@@ -42,6 +42,16 @@ jwtAuthRouter
 
                         return JwtAuthService.getUserCalendar(req.app.get('db'), dbUser.id)
                             .then(dbCalendar => {
+                                if(!dbCalendar) {
+                                    const sub = dbUser.user_name;
+                                    const payload = { user_id: dbUser.id };
+                                    return res
+                                        .status(200)
+                                        .send({
+                                            authToken: JwtAuthService.createJwt(sub, payload),
+                                            dbUser
+                                        })
+                                }
 
                                 return JwtAuthService.getUserEvents(req.app.get('db'), dbCalendar.id)
                                     .then(dbEvents => {
