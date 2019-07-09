@@ -85,9 +85,15 @@ eventsRouter
 
         EventsService.updateEvent(req.app.get('db'), event_id, eventToUpdate)
             .then(noContent => {
-                res
-                    .status(204)
-                    .end();
+
+                return EventsService.getEventById(req.app.get('db'), event_id)
+                    .then(event => {
+                        res
+                            .status(200)
+                            .send({
+                                event: EventsService.sanitizeEvent(event)
+                            })
+                    })
             })
             .catch(next);
     })
