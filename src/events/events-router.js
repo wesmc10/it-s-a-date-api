@@ -36,7 +36,9 @@ eventsRouter
                 res
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${event.id}`))
-                    .json(EventsService.sanitizeEvent(event))
+                    .send({
+                        event: EventsService.sanitizeEvent(event)
+                    });
             })
             .catch(next);
     })
