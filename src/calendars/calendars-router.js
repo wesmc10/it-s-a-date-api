@@ -28,7 +28,9 @@ calendarsRouter
                 res
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${calendar.id}`))
-                    .json(CalendarsService.sanitizeCalendar(calendar));
+                    .send({
+                        calendar: CalendarsService.sanitizeCalendar(calendar)
+                    });
             })
             .catch(next);
     })
