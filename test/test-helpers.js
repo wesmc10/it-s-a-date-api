@@ -15,7 +15,7 @@ function makeTestUsers() {
             first_name: 'User-2-first-name',
             last_name: 'User-2-last-name',
             user_name: 'User-2-user-name',
-            password: ')9*7PoIu'
+            password: '$9*7PoIu'
         },
         {
             id: 3,

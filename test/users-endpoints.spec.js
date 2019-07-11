@@ -38,17 +38,19 @@ describe('Users Endpoints', () => {
                     .send(newUser)
                     .expect(201)
                     .expect(res => {
-                        expect(res.body).to.have.property('id');
-                        expect(res.body.first_name).to.eql(newUser.first_name);
-                        expect(res.body.last_name).to.eql(newUser.last_name);
-                        expect(res.body.user_name).to.eql(newUser.user_name);
-                        expect(res.body).to.not.have.property('password');
-                        expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
+                        expect(res.body).to.be.an('object').that.has.property('user');
+                        expect(res.body).to.be.an('object').that.has.property('authToken');
+                        expect(res.body.user).to.have.property('id');
+                        expect(res.body.user.first_name).to.eql(newUser.first_name);
+                        expect(res.body.user.last_name).to.eql(newUser.last_name);
+                        expect(res.body.user.user_name).to.eql(newUser.user_name);
+                        expect(res.body.user).to.not.have.property('password');
+                        expect(res.headers.location).to.eql(`/api/users/${res.body.user.id}`);
                     })
                     .expect(res =>
                         db
                             .from('itsadate_users')
-                            .where({ id: res.body.id })
+                            .where({ id: res.body.user.id })
                             .select('*')
                             .first()
                             .then(user => {

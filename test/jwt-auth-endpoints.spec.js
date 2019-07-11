@@ -44,9 +44,14 @@ describe('Authorization Endpoint', () => {
                 return supertest(app)
                     .post('/api/auth/login')
                     .send(userValidAuthorization)
-                    .expect(200, {
-                        authToken: expectedJwt
-                    });
+                    .expect(200)
+                    .expect(res => {
+                        expect(res.body).to.be.an('object');
+                        expect(res.body).to.have.property('authToken');
+                        expect(res.body.authToken).to.eql(expectedJwt);
+                        expect(res.body).to.have.property('dbUser');
+                        expect(res.body.dbUser).to.have.property('id');
+                    })
             });
         });
     });

@@ -8,7 +8,6 @@ describe('Events Endpoints', () => {
     const testUsers = testHelpers.makeTestUsers();
     const testUser = testUsers[0];
     const testCalendars = testHelpers.makeTestCalendars();
-    const testCalendar = testCalendars[0];
     const testEvents = testHelpers.makeTestEvents();
     const testEvent = testEvents[0];
 
@@ -57,24 +56,25 @@ describe('Events Endpoints', () => {
                     .send(newEvent)
                     .expect(201)
                     .expect(res => {
-                        expect(res.body).to.have.property('id');
-                        expect(res.body.event_name).to.eql(newEvent.event_name);
-                        expect(res.body.description).to.eql(newEvent.description);
-                        expect(res.body.event_time).to.eql(newEvent.event_time);
-                        expect(res.body.location).to.eql(newEvent.location);
-                        expect(res.body.other).to.eql(newEvent.other);
-                        expect(res.body.day_id).to.eql(newEvent.day_id);
-                        expect(res.body.calendar_id).to.eql(newEvent.calendar_id);
-                        expect(res.headers.location).to.eql(`/api/events/${res.body.id}`);
+                        expect(res.body).to.be.an('object').that.has.property('event');
+                        expect(res.body.event).to.have.property('id');
+                        expect(res.body.event.event_name).to.eql(newEvent.event_name);
+                        expect(res.body.event.description).to.eql(newEvent.description);
+                        expect(res.body.event.event_time).to.eql(newEvent.event_time);
+                        expect(res.body.event.location).to.eql(newEvent.location);
+                        expect(res.body.event.other).to.eql(newEvent.other);
+                        expect(res.body.event.day_id).to.eql(newEvent.day_id);
+                        expect(res.body.event.calendar_id).to.eql(newEvent.calendar_id);
+                        expect(res.headers.location).to.eql(`/api/events/${res.body.event.id}`);
                     })
                     .expect(res =>
                         db
                             .select('*')
                             .from('itsadate_events')
-                            .where('id', res.body.id)
+                            .where('id', res.body.event.id)
                             .first()
                             .then(event => {
-                                expect(event.id).to.eql(res.body.id);
+                                expect(event.id).to.eql(res.body.event.id);
                                 expect(event.event_name).to.eql(newEvent.event_name);
                                 expect(event.description).to.eql(newEvent.description);
                                 expect(event.event_time).to.eql(newEvent.event_time);
@@ -194,7 +194,7 @@ describe('Events Endpoints', () => {
                     .patch(`/api/events/${eventId}`)
                     .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
                     .send(eventToUpdate)
-                    .expect(204)
+                    .expect(200)
                     .then(res =>
                         supertest(app)
                             .get(`/api/events/${eventId}`)   

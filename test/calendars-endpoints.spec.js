@@ -44,19 +44,20 @@ describe('Calendars Endpoints', () => {
                     .send(newCalendar)
                     .expect(201)
                     .expect(res => {
-                        expect(res.body).to.have.property('id');
-                        expect(res.body.calendar_name).to.eql(newCalendar.calendar_name);
-                        expect(res.body.user_id).to.eql(newCalendar.user_id);
-                        expect(res.headers.location).to.eql(`/api/calendars/${res.body.id}`);
+                        expect(res.body).to.be.an('object');
+                        expect(res.body.calendar).to.have.property('id');
+                        expect(res.body.calendar.calendar_name).to.eql(newCalendar.calendar_name);
+                        expect(res.body.calendar.user_id).to.eql(newCalendar.user_id);
+                        expect(res.headers.location).to.eql(`/api/calendars/${res.body.calendar.id}`);
                     })
                     .expect(res =>
                         db
                             .select('*')
                             .from('itsadate_calendars')
-                            .where('id', res.body.id)
+                            .where('id', res.body.calendar.id)
                             .first()
                             .then(calendar => {
-                                expect(calendar.id).to.eql(res.body.id);
+                                expect(calendar.id).to.eql(res.body.calendar.id);
                                 expect(calendar.calendar_name).to.eql(newCalendar.calendar_name);
                                 expect(calendar.user_id).to.eql(newCalendar.user_id);
                             })
@@ -150,7 +151,7 @@ describe('Calendars Endpoints', () => {
                     .patch(`/api/calendars/${calendarId}`)
                     .set('Authorization', testHelpers.makeAuthorizationHeader(testUser))
                     .send(updateCalendar)
-                    .expect(204)
+                    .expect(200)
                     .then(res =>
                         supertest(app)
                             .get(`/api/calendars/${calendarId}`)

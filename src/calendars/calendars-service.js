@@ -5,7 +5,7 @@ const CalendarsService = {
         return db
             .select('*')
             .from('itsadate_calendars')
-            .where('id', id)
+            .where({ id })
             .first();
     },
     insertNewCalendarIntoDatabase(db, newCalendar) {
