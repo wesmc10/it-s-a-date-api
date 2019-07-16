@@ -13,3 +13,8 @@ Returns data about a specific user
 * Method
 
    `POST`
+
+* Data Parameters
+
+   'user_name': [string]
+   'password': [string]
