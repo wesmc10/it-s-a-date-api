@@ -16,5 +16,19 @@ Returns data about a specific user
 
 * Data Parameters
 
-   'user_name': [string]
-   'password': [string]
+   `'user_name': [string]`
+
+   `'password': [string]`
+
+* Successful Response
+
+   **Code:** 200
+
+* Error Response
+
+   **Code:** 400
+   **Content:** `{ error: Incorrect username or password }`
+
+   OR
+
+   `{ error: Missing [key] }`
