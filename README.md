@@ -7,7 +7,9 @@
 Returns data about a specific user
 
 * URL
-/auth/login
+
+   /auth/login
 
 * Method
-`POST`
+
+   `POST`
