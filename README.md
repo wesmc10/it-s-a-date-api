@@ -3,10 +3,11 @@
 ## API Base Endpoint:
 * https://enigmatic-brook-16229.herokuapp.com/api
 
+
 ## Login
 Returns data about a specific user and the user's calendar and events
 
-* URL
+* Route
 
    /auth/login
 
@@ -24,7 +25,7 @@ Returns data about a specific user and the user's calendar and events
 
    **Code:** 200
 
-   **Content:** `{ authToken: [string], dbCalendar: { object }, dbEvents: [array], dbUser: { object } }`
+   **Content:** `{ authToken: [string], dbCalendar: [object], dbEvents: [array], dbUser: [object] }`
 
 * Error Response
 
@@ -36,10 +37,11 @@ Returns data about a specific user and the user's calendar and events
 
    `{ error: Missing [key] }`
 
+
 ## Users
 Returns data about a specific user
 
-* URL
+* Route
 
    /users
 
@@ -51,7 +53,7 @@ Returns data about a specific user
 
    `'first_name': [string]`
 
-   `'last_name': [string`
+   `'last_name': [string]`
 
    `'user_name': [string]`
 
@@ -61,7 +63,7 @@ Returns data about a specific user
 
    **Code:** 201
 
-   **Content:** `{ authToken: [string], user: { object } }`
+   **Content:** `{ authToken: [string], user: [object] }`
 
 * Error Response
 
@@ -85,3 +87,232 @@ Returns data about a specific user
 
    `{ Password must have at least one lowercase and uppercase letter, number, and special character }`
 
+
+## Calendars
+Returns data about a specific calendar
+
+* Route
+
+   /calendars
+
+* Method
+
+   `POST`
+
+* Data Parameters
+
+   `'calendar_name': [string]`
+
+   `'user_id': [integer]`
+
+* Successful Response
+
+   **Code:** 201
+
+   **Content:** `{ calendar: [object] }`
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: The [key] field is required }`
+
+
+* Route
+
+   /calendars/:calendar_id
+
+* Method
+
+   `GET`
+
+* Data Parameters
+
+   None
+
+* Successful Response
+
+   **Code:** 200
+
+   **Content:** `{ calendar: [object] }`
+
+* Error Response
+
+   **Code:** 404
+
+   **Content:** `{ error: Calendar does not exist }`
+
+
+* Method
+
+   `DELETE`
+
+* Data Parameters
+
+   None
+
+* Successful Response
+
+   **Code:** 204
+
+   **Content:** None
+
+* Error Response
+
+   **Code:** 404
+
+   **Content:** `{ error: Calendar does not exist }`
+
+
+* Method
+
+   `PATCH`
+
+* Data Parameters
+
+   `'calendar_name': [string]`
+
+* Successful Response
+
+   **Code:** 200
+
+   **Content:** `{ calendar: [object] }`
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: Calendar does not exist }`
+
+   OR
+
+   `{ error: Request body must contain a calendar name }`
+
+
+## Events
+Returns data about specific user events
+
+* Route
+
+   /events
+
+* Method
+
+   `POST`
+
+* Data Parameters
+
+   `'event_name': [string]`
+
+   `'description': [string]`
+
+   `'event_time': [time]`
+
+   `'location': [string]`
+   
+   `'other': [string]`
+
+   `'day_id': [integer]`
+
+   `'calendar_id': [integer]`
+
+* Successful Response
+
+   **Code:** 201
+
+   **Content:** `{ event: [object] }`
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: The [key] field is required }`
+
+
+* Route
+
+   /events/:event_id
+
+* Method
+
+   `GET`
+
+* Data Parameters
+
+   None
+
+* Successful Response
+
+   **Code:** 200
+
+   **Content:** `{ event: [object] }`
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: Event does not exist }`
+
+
+* Route
+
+   /events/:event_id
+
+* Method
+
+   `DELETE`
+
+* Data Parameters
+
+   None
+
+* Successful Response
+
+   **Code:** 204
+
+   **Content:** None
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: Event does not exist }`
+
+
+* Route
+
+   /events/:event_id
+
+* Method
+
+   `PATCH`
+
+* Data Parameters
+
+    **At least one of:**
+
+   `'event_name': [string]`
+
+   `'description': [string]`
+
+   `'event_time': [time]`
+
+   `'location': [string]`
+   
+   `'other': [string]`
+
+* Successful Response
+
+   **Code:** 200
+
+   **Content:** `{ event: [object] }`
+
+* Error Response
+
+   **Code:** 400
+
+   **Content:** `{ error: Event does not exist }`
+
+   OR
+
+   `{ error: Request body must contain either an event name, description, time, location, or other }`
