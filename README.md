@@ -39,7 +39,7 @@ Returns data about a specific user and the user's calendar and events
 
 
 ## Users
-Returns data about a specific user
+Posts and returns data about a specific user
 
 * Route
 
@@ -88,8 +88,8 @@ Returns data about a specific user
    `{ Password must have at least one lowercase and uppercase letter, number, and special character }`
 
 
-## Calendars
-Returns data about a specific calendar
+## POST Calendars
+Posts and returns data about a specific calendar
 
 * Route
 
@@ -118,6 +118,9 @@ Returns data about a specific calendar
    **Content:** `{ error: The [key] field is required }`
 
 
+## GET Calendars
+Returns data about a specific calendar
+
 * Route
 
    /calendars/:calendar_id
@@ -143,6 +146,9 @@ Returns data about a specific calendar
    **Content:** `{ error: Calendar does not exist }`
 
 
+## DELETE Calendars
+Deletes a specific calendar
+
 * Method
 
    `DELETE`
@@ -163,6 +169,9 @@ Returns data about a specific calendar
 
    **Content:** `{ error: Calendar does not exist }`
 
+
+## PATCH Calendars
+Updates and returns data about a specific calendar
 
 * Method
 
@@ -189,8 +198,8 @@ Returns data about a specific calendar
    `{ error: Request body must contain a calendar name }`
 
 
-## Events
-Returns data about specific user events
+## POST Events
+Posts and returns data about specific user events
 
 * Route
 
@@ -229,6 +238,9 @@ Returns data about specific user events
    **Content:** `{ error: The [key] field is required }`
 
 
+## GET Events
+Returns data about a specific user event
+
 * Route
 
    /events/:event_id
@@ -254,6 +266,9 @@ Returns data about specific user events
    **Content:** `{ error: Event does not exist }`
 
 
+## DELETE Events
+Deletes a specific user event
+
 * Route
 
    /events/:event_id
@@ -278,6 +293,9 @@ Returns data about specific user events
 
    **Content:** `{ error: Event does not exist }`
 
+
+## PATCH Events
+Updates and returns data about a specific user event
 
 * Route
 
