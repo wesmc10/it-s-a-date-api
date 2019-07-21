@@ -22,10 +22,6 @@ app.use('/api/calendars', calendarsRouter);
 app.use('/api/auth', jwtAuthRouter);
 app.use('/api/events', eventsRouter);
 
-app.get('/', (req, res) => {
-    res.send('Hello, world!');
-});
-
 app.use(function errorHandler(error, req, res, next) {
     let response;
     if (NODE_ENV === 'production') {
